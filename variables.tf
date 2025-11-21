@@ -1,16 +1,20 @@
 variable "name" {
-  type = string
+  description = "Prefix used for all created resources"
+  type        = string
 }
 
 variable "server_type" {
-  type = string
+  description = "Hetzner server type such as cx22"
+  type        = string
 }
 
 variable "location" {
-  type = string
+  description = "Hetzner data center location identifier"
+  type        = string
 }
 
 variable "floating_ip" {
+  description = "Optional floating IP configuration"
   type = object({
     id         = number
     ip_address = string
@@ -20,53 +24,62 @@ variable "floating_ip" {
 }
 
 variable "volume" {
+  description = "Optional volume to attach; only ext4 supported"
   type = object({
     id = number
   })
-  default     = null
-  description = "Only ext4 is supported!"
+  default = null
 }
 
 variable "ssh_key_id" {
-  type = string
+  description = "Identifier of the Hetzner SSH key to provision"
+  type        = string
 }
 
 variable "ssh_private_key" {
-  type = string
+  description = "Private key used for remote provisioning"
+  type        = string
+  sensitive   = true
 }
 
 variable "keep_disk" {
-  type    = bool
-  default = true
+  description = "Keep existing disk when server image changes"
+  type        = bool
+  default     = true
 }
 
 variable "containers_folder" {
-  type = string
+  description = "Path to Docker container build contexts"
+  type        = string
 }
 
 variable "backups" {
-  type    = bool
-  default = true
+  description = "Enable Hetzner automatic backups"
+  type        = bool
+  default     = true
 }
 
 variable "docker_compose_file_path" {
-  type = string
+  description = "Path to docker-compose.yml that should be deployed"
+  type        = string
 }
 
 variable "firewall_ids" {
-  type    = list(number)
-  default = []
+  description = "Additional firewall IDs to attach to the server"
+  type        = list(number)
+  default     = []
 }
 
 variable "create_final_snapshot" {
+  description = "Create final snapshot on destroy; requires hcloud token in env"
   type        = bool
   default     = true
-  description = "Requires \"HCLOUD_TOKEN\" or \"TF_VAR_hcloud_token\" environment variable in pipeline."
 }
 
 variable "env_variables" {
-  type    = list(object({ name = string, value = string }))
-  default = []
+  description = "Extra environment variables passed to docker-compose"
+  type        = list(object({ name = string, value = string }))
+  default     = []
 }
 
 locals {
